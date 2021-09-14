@@ -1,0 +1,58 @@
+// https://www.codewars.com/kata/51e056fe544cf36c410000fb
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+
+
+public class TopWords
+{
+    public static List<string> Top3(string s)
+    {
+        s = Regex.Replace(s, "[^a-zA-Z0-9' ]", " ");
+      Console.WriteLine(s);
+        List<string> list = new List<string>();
+        var x = s.Split(' ');
+        for (int i = 0; i < x.Length; i++) {
+          bool allowed = false;
+          foreach (char c in x[i]) {
+            if (c != '\'') {
+              allowed = true;
+            }
+          }
+          if (!String.IsNullOrWhiteSpace(x[i]) && allowed == true) {
+            list.Add(x[i].ToLower());
+            }
+        }
+        list.Sort();
+
+        var array = list.ToArray();
+        IDictionary<string, int> strings = new Dictionary<string, int>(); 
+        for (int i = 0; i < array.Length; i++) {
+          if (!strings.ContainsKey(array[i])) {
+            strings.Add(array[i], 1);
+          } else {
+            strings[array[i]] += 1;
+          }
+        }
+        
+        strings = strings.OrderByDescending(ab => ab.Value).ToDictionary(ab => ab.Key, ab => ab.Value);
+      foreach (var abcde in strings.Values) {
+        Console.WriteLine(abcde);
+      }
+        List<string> letters = new List<string>();
+        if (strings.Count >= 3) {
+          letters.Add(strings.Keys.ElementAt(0));
+          letters.Add(strings.Keys.ElementAt(1));
+         letters.Add(strings.Keys.ElementAt(2));
+        } else if (strings.Count == 2) {
+          letters.Add(strings.Keys.ElementAt(0));
+          letters.Add(strings.Keys.ElementAt(1));
+        } else if (strings.Count == 1) {
+          letters.Add(strings.Keys.ElementAt(0));
+        }
+        
+        return letters;
+    }
+}
